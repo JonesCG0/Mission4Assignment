@@ -1,61 +1,66 @@
 ﻿using System;
 
-class Program
+namespace Mission4Assignment
 {
-    static void Main(string[] args)
+
+    class Program
     {
-        // Initialize board
-        char[,] board = new char[3, 3];
-        for (int i = 0; i < 3; i++)
+        static void Main(string[] args)
         {
-            for (int j = 0; j < 3; j++)
+            // Initialize board
+            char[,] board = new char[3, 3];
+            for (int i = 0; i < 3; i++)
             {
-                board[i, j] = '-';
+                for (int j = 0; j < 3; j++)
+                {
+                    board[i, j] = '-';
+                }
             }
-        }
 
-        // Create instance of GameHelper to handle game logic
-        GameHelper helper = new GameHelper(board);
+            // Create instance of GameHelper to handle game logic
+            GameHelper helper = new GameHelper(board);
 
-        bool gameOver = false;
-        char currentPlayer = 'X';
 
-        while (!gameOver)
-        {
-            // Display the current state of the board
-            helper.PrintBoard();
+            bool gameOver = false;
+            char currentPlayer = 'X';
 
-            Console.Write($"Player {currentPlayer}, enter your move (row and column, separated by a space): ");
-            string[] input = Console.ReadLine().Split();
-            int row = int.Parse(input[0]);
-            int col = int.Parse(input[1]);
-
-            // Check if the move is valid
-            if (board[row, col] == '-')
+            while (!gameOver)
             {
-                board[row, col] = currentPlayer;
+                // Display the current state of the board
+                helper.PrintBoard();
 
-                // Check for a winner
-                gameOver = helper.CheckWinner(currentPlayer);
+                Console.Write($"Player {currentPlayer}, enter your move (row and column, separated by a space): ");
+                string[] input = Console.ReadLine().Split();
+                int row = int.Parse(input[0]);
+                int col = int.Parse(input[1]);
 
-                // Switch to the other player
-                currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+                // Check if the move is valid
+                if (board[row, col] == '-')
+                {
+                    board[row, col] = currentPlayer;
+
+                    // Check for a winner
+                    gameOver = helper.CheckWinner(currentPlayer);
+
+                    // Switch to the other player
+                    currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+                }
+                else
+                {
+                    Console.WriteLine("Invalid move! Please try again.");
+                }
+            }
+
+            // Display final board state and announce winner
+            helper.PrintBoard();
+            if (currentPlayer == 'X')
+            {
+                Console.WriteLine("Player O wins!");
             }
             else
             {
-                Console.WriteLine("Invalid move! Please try again.");
+                Console.WriteLine("Player X wins!");
             }
-        }
-
-        // Display final board state and announce winner
-        helper.PrintBoard();
-        if (currentPlayer == 'X')
-        {
-            Console.WriteLine("Player O wins!");
-        }
-        else
-        {
-            Console.WriteLine("Player X wins!");
         }
     }
 }
