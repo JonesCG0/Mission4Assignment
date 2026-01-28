@@ -17,25 +17,21 @@ namespace Mission4Assignment
                 board[i] = ' ';
             }
 
-            // Create an instance of the GameHelper class
+            // Create an instance
             GameHelper helper = new GameHelper();
 
-            // X always goes first
+            // X first
             char currentPlayer = 'X';
 
-            // Main game loop
             while (true)
             {
-                // Display the current board
                 helper.PrintBoard(board);
 
-                // Get a valid move from the current player
                 int move = GetValidMove(board, currentPlayer);
 
-                // Place the player's marker on the board
+
                 board[move] = currentPlayer;
 
-                // Check if there is a winner or a tie
                 char result = helper.CheckWinner(board);
 
                 // If X or O wins, announce the winner and end the game
@@ -81,7 +77,6 @@ namespace Mission4Assignment
                     continue;
                 }
 
-                // Convert the player's choice to a board index
                 int index = choice - 1;
 
                 // Check that the chosen spot is empty
@@ -91,7 +86,7 @@ namespace Mission4Assignment
                     continue;
                 }
 
-                // If all checks pass, return the valid index
+
                 return index;
             }
         }
