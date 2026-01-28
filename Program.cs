@@ -2,64 +2,79 @@
 
 namespace Mission4Assignment
 {
-
     class Program
     {
         static void Main(string[] args)
         {
-            // Initialize board
-            char[,] board = new char[3, 3];
-            for (int i = 0; i < 3; i++)
+            Console.WriteLine("Welcome to Tic-Tac-Toe!");
+
+            // Initialize board (1D array of 9 spaces)
+            char[] board = new char[9];
+            for (int i = 0; i < board.Length; i++)
             {
-                for (int j = 0; j < 3; j++)
-                {
-                    board[i, j] = '-';
-                }
+                board[i] = ' ';
             }
 
-            // Create instance of GameHelper to handle game logic
-            GameHelper helper = new GameHelper(board);
+            GameHelper helper = new GameHelper();
 
-
-            bool gameOver = false;
             char currentPlayer = 'X';
 
-            while (!gameOver)
+            while (true)
             {
-                // Display the current state of the board
-                helper.PrintBoard();
+                helper.PrintBoard(board);
 
-                Console.Write($"Player {currentPlayer}, enter your move (row and column, separated by a space): ");
-                string[] input = Console.ReadLine().Split();
-                int row = int.Parse(input[0]);
-                int col = int.Parse(input[1]);
+                int move = GetValidMove(board, currentPlayer);
 
-                // Check if the move is valid
-                if (board[row, col] == '-')
+                board[move] = currentPlayer;
+
+                char result = helper.CheckWinner(board);
+
+                if (result == 'X' || result == 'O')
                 {
-                    board[row, col] = currentPlayer;
-
-                    // Check for a winner
-                    gameOver = helper.CheckWinner(currentPlayer);
-
-                    // Switch to the other player
-                    currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+                    helper.PrintBoard(board);
+                    Console.WriteLine($"Player {result} wins!");
+                    break;
                 }
-                else
+                else if (result == 'T')
                 {
-                    Console.WriteLine("Invalid move! Please try again.");
+                    helper.PrintBoard(board);
+                    Console.WriteLine("It's a tie!");
+                    break;
                 }
-            }
 
-            // Display final board state and announce winner
-            helper.PrintBoard();
-            if (currentPlayer == 'X')
-            {
-                Console.WriteLine("Player O wins!");
+                // Switch player
+                currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
             }
-            else
+        }
+
+        private static int GetValidMove(char[] board, char currentPlayer)
+        {
+            while (true)
             {
-                Console.WriteLine("Player X wins!");
+                Console.Write($"Player {currentPlayer}, enter your move (1-9): ");
+                string input = Console.ReadLine();
+
+                if (!int.TryParse(input, out int choice))
+                {
+                    Console.WriteLine("Please enter a number 1-9.");
+                    continue;
+                }
+
+                if (choice < 1 || choice > 9)
+                {
+                    Console.WriteLine("Move must be between 1 and 9.");
+                    continue;
+                }
+
+                int index = choice - 1;
+
+                if (board[index] != ' ')
+                {
+                    Console.WriteLine("That spot is already taken. Try again.");
+                    continue;
+                }
+
+                return index;
             }
         }
     }
